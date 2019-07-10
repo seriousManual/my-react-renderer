@@ -1,12 +1,36 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React, { Component } from 'react'
+import CustomRenderer from './renderer'
 
-ReactDOM.render(<App />, document.getElementById('root'));
+class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      count: 0
+    };
+  }
+  render() {
+    const inc = () => {
+        this.setState(state => {
+            return {count: state.count + 1};
+        });
+    };
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+    const dec = () => {
+        this.setState(state => {
+            return {count: state.count - 1};
+        });
+    };
+
+    return (
+      <div>
+        <div>{this.state.count}</div>
+        <button onClick={inc}>+</button>
+        <button onClick={dec}>-</button>
+
+        {Array.from(new Array(Math.max(this.state.count, 0)), (a, v) => <div>#{v}</div>)}
+      </div>
+    );
+  }
+}
+
+CustomRenderer.render(<App />, document.getElementById('root'))
