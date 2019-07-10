@@ -14,11 +14,11 @@ const hostConfig = {
   },
 
   prepareForCommit(containerInfo) {
-    // console.log('prepareForCommit');
+    console.log('prepareForCommit');
   },
 
   resetAfterCommit(containerInfo) {
-    // console.log('resetAfterCommit');
+    console.log('resetAfterCommit');
   },
 
   createInstance(
@@ -28,13 +28,13 @@ const hostConfig = {
     hostContext,
     internalInstanceHandle
   ) {
-    // console.log(
-    //   'createInstance',
-    //   type,
-    //   props,
-    //   rootContainerInstance,
-    //   hostContext,
-    // );
+    console.log(
+      'createInstance',
+      type,
+      props,
+      rootContainerInstance,
+      hostContext,
+    );
     return document.createElement(type);
   },
 
@@ -65,7 +65,8 @@ const hostConfig = {
         throw new Error('TODO: We haven\'t handled other properties/attributes')
       }
     })
-    // console.log('finalizeInitialChildren', domElement, type, props, rootContainerInstance, hostContext);
+    
+    console.log('finalizeInitialChildren', domElement, type, props, rootContainerInstance, hostContext);
   },
 
   prepareUpdate(
@@ -107,12 +108,12 @@ const hostConfig = {
     hostContext,
     internalInstanceHandle
   ) {
-    // console.log(
-    //   'createTextInstance',
-    //   text,
-    //   rootContainerInstance,
-    //   hostContext,
-    // );
+    console.log(
+      'createTextInstance',
+      text,
+      rootContainerInstance,
+      hostContext,
+    );
     return document.createTextNode(text);
   },
 
@@ -160,16 +161,17 @@ const hostConfig = {
   },
 
   commitTextUpdate(textInstance, oldText, newText) {
-    // console.log('commitTextUpdate', oldText, newText);
+    console.log('commitTextUpdate', oldText, newText);
     textInstance.nodeValue = newText;
   },
 
   appendChild(parentInstance, child) {
-    console.log('appendChild');
+    console.log('appendChild', parentInstance, child);
+    parentInstance.appendChild(child);
   },
 
   appendChildToContainer(container, child) {
-    // console.log('appendChildToContainer', container, child);
+    console.log('appendChildToContainer', container, child);
     container.appendChild(child)
   },
 
@@ -182,11 +184,13 @@ const hostConfig = {
   },
 
   removeChild(parentInstance, child) {
-    console.log('removeChild');
+    console.log('removeChild', parentInstance, child);
+    parentInstance.removeChild(child);
   },
 
   removeChildFromContainer(container, child) {
     console.log('removeChildFromContainer');
+    container.removeChild(child);
   }
 };
 
