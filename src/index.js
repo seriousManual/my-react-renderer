@@ -1,5 +1,7 @@
 import React, { useState, useEffect, Component, Fragment } from 'react'
-import LaunchpadRenderer, { Button, FunctionX, FunctionY, Color } from './renderer'
+import LaunchpadRenderer, { Color } from './renderer'
+import getMock from './renderer/mockLP'
+
 
 class App extends Component {
   constructor() {
@@ -8,22 +10,21 @@ class App extends Component {
     this.state = {foo: true};
   }
 
-  componentDidMount() {
-    setTimeout(() => this.setState({foo: false}), 3000);
-  }
+  // componentDidMount() {
+  //   setTimeout(() => this.setState({foo: false}), 3000);
+  // }
 
   render() {
     const color = this.state.foo ? Color.RED : Color.GREEN;
   
     return (
-      <Fragment>
-        <Button x={0} y={0} color={color} />
+      <launchpad launchpad={getMock()}>
+        <button x={0} y={0} color={color} />
         {/* <FunctionX x={0} color={Color.RED} onPress={() => console.log('hepp')} />
         <FunctionY y={0} color={Color.RED} onPress={() => console.log('hepp')} /> */}
-      </Fragment>
+      </launchpad>
     );
   }
 }
 
-const myLP = {le: 'launchpad'}
-LaunchpadRenderer.render(<App />, myLP)
+LaunchpadRenderer.render(<App />);

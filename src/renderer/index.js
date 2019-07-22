@@ -1,16 +1,16 @@
-import React from 'react'
 import ReactReconciler from 'react-reconciler';
-import { Color } from 'lunchpad';
 import ButtonElement from './elements/Button';
+import RootElement from './elements/Root';
+import LaunchpadElement from './elements/Launchpad';
 
 const hostConfig = {
   getRootHostContext(rootContainerInstance) {
-    console.log('getRootHostContext');
+    // console.log('getRootHostContext');
     return {}
   },
 
   getChildHostContext(parentHostContext, type, rootContainerInstance) {
-    console.log('getChildHostContext');
+    // console.log('getChildHostContext');
     return {};
   },
 
@@ -19,20 +19,29 @@ const hostConfig = {
   },
 
   prepareForCommit(containerInfo) {
-    console.log('prepareForCommit');
+    console.log('prepareForCommit', containerInfo);
   },
 
   resetAfterCommit(containerInfo) {
-    console.log('resetAfterCommit');
+    console.log('resetAfterCommit', containerInfo);
   },
 
   createInstance(type, props, rootContainerInstance, hostContext, internalInstanceHandle) {
     console.log('createInstance', type, props, rootContainerInstance, hostContext);
     
-    return new ButtonElement(props);
+    switch (type) {
+      case 'button':
+          return new ButtonElement(rootContainerInstance, props);
+      case 'launchpad':
+        return new LaunchpadElement(rootContainerInstance, props);
+      default:
+        return null;
+    }
+    
   },
 
   appendInitialChild(parentInstance, child) {
+    console.log('appendInitialChild', parentInstance, child);
     parentInstance.appendChild(child)
   },
 
@@ -42,17 +51,15 @@ const hostConfig = {
     // attach event listeners
   },
 
-  prepareUpdate(domElement, type, oldProps, newProps, rootContainerInstance, hostContext) {
-    console.log('prepareUpdate', domElement, type, oldProps, newProps);
-
-    //return a payload object that indicates which update should be done
+  prepareUpdate(lpElement, type, oldProps, newProps, rootContainerInstance, hostContext) {
+    console.log('prepareUpdate', lpElement, type, oldProps, newProps);
 
     return {};
   },
 
   shouldSetTextContent(type, props) {
-    console.log('shouldSetTextContent');
-    return false; // || true;
+    // console.log('shouldSetTextContent');
+    return false;
   },
 
   shouldDeprioritizeSubtree(type, props) {
@@ -77,15 +84,16 @@ const hostConfig = {
   supportsMutation: true,
 
   commitMount(domElement, type, newProps, internalInstanceHandle) {
-    console.log('commitMount');
+    console.log('commitMount', domElement, type, newProps, internalInstanceHandle);
   },
 
   commitUpdate(domElement, updatePayload, type, oldProps, newProps, internalInstanceHandle) {
     // run the update payload
+    console.log('commitUpdate', domElement, updatePayload, type, oldProps, newProps)
   },
 
   resetTextContent(domElement) {
-    console.log('resetTextContent');
+    console.log('resetTextContent', domElement);
   },
 
   commitTextUpdate(textInstance, oldText, newText) {
@@ -100,7 +108,7 @@ const hostConfig = {
 
   appendChildToContainer(container, child) {
     console.log('appendChildToContainer', container, child);
-    container.push(child); 
+    container.appendChild(child); 
   },
 
   insertBefore(parentInstance, child, beforeChild) {
@@ -126,32 +134,15 @@ const LPRenderer = ReactReconciler(hostConfig);
 
 let internalContainerStructure;
 export default {
-  render(elements, launchpad, callback) {
-    const rootContainer = []
+  render(elements, callback) {
+    const root = new RootElement();
+
     if (!internalContainerStructure) {
-      internalContainerStructure = LPRenderer.createContainer(rootContainer, false, false);
+      internalContainerStructure = LPRenderer.createContainer(root, false, false);
     }
 
     LPRenderer.updateContainer(elements, internalContainerStructure, null, callback);
   }
-}
-
-export function Button(props) {
-  const { onPress, onRelease, x, y, color } = props;
-
-  if (onRelease) {
-    console.warn('onRelease is not implemented yet');
-  }
-
-  return <bier x={x} y={y} color={color} />
-}
-
-export function FunctionX(props) {
-  return <bar />
-}
-
-export function FunctionY(props) {
-  return <foo />
 }
 
 export { Color } from 'lunchpad'
