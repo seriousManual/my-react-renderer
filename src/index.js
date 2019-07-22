@@ -1,42 +1,29 @@
-import React, { Component } from 'react'
-import CustomRenderer from './renderer'
+import React, { useState, useEffect, Component, Fragment } from 'react'
+import LaunchpadRenderer, { Button, FunctionX, FunctionY, Color } from './renderer'
 
 class App extends Component {
   constructor() {
     super();
 
-    this.state = {count: 0};
-
-    setTimeout(() => {
-        this.setState(state => {
-            return {count: 1};
-        });
-    }, 2000);
+    this.state = {foo: true};
   }
+
+  componentDidMount() {
+    setTimeout(() => this.setState({foo: false}), 3000);
+  }
+
   render() {
-    const inc = () => {
-        this.setState(state => {
-            return {count: state.count + 1};
-        });
-    };
-
-    const dec = () => {
-        this.setState(state => {
-            return {count: state.count - 1};
-        });
-    };
-console.log('rerender');
+    const color = this.state.foo ? Color.RED : Color.GREEN;
+  
     return (
-      <div>foo
-        <div>{this.state.count}</div>
-        <button onClick={inc}>+</button>
-        <button onClick={dec}>-</button>
-
-        {Array.from(new Array(Math.max(this.state.count, 0)), (a, v) => <div>#{v}</div>)}
-        {this.state > 0 ? 'bar' : null}
-      </div>
+      <Fragment>
+        <Button x={0} y={0} color={color} />
+        {/* <FunctionX x={0} color={Color.RED} onPress={() => console.log('hepp')} />
+        <FunctionY y={0} color={Color.RED} onPress={() => console.log('hepp')} /> */}
+      </Fragment>
     );
   }
 }
 
-CustomRenderer.render(<App />, document.getElementById('root'))
+const myLP = {le: 'launchpad'}
+LaunchpadRenderer.render(<App />, myLP)

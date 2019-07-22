@@ -1,11 +1,16 @@
+import React from 'react'
 import ReactReconciler from 'react-reconciler';
+import { Color } from 'lunchpad';
+import ButtonElement from './elements/Button';
 
 const hostConfig = {
   getRootHostContext(rootContainerInstance) {
+    console.log('getRootHostContext');
     return {}
   },
 
   getChildHostContext(parentHostContext, type, rootContainerInstance) {
+    console.log('getChildHostContext');
     return {};
   },
 
@@ -21,80 +26,32 @@ const hostConfig = {
     console.log('resetAfterCommit');
   },
 
-  createInstance(
-    type,
-    props,
-    rootContainerInstance,
-    hostContext,
-    internalInstanceHandle
-  ) {
-    console.log(
-      'createInstance',
-      type,
-      props,
-      rootContainerInstance,
-      hostContext,
-    );
-    return document.createElement(type);
+  createInstance(type, props, rootContainerInstance, hostContext, internalInstanceHandle) {
+    console.log('createInstance', type, props, rootContainerInstance, hostContext);
+    
+    return new ButtonElement(props);
   },
 
   appendInitialChild(parentInstance, child) {
     parentInstance.appendChild(child)
   },
 
-  finalizeInitialChildren(
-    domElement,
-    type,
-    props,
-    rootContainerInstance,
-    hostContext
-  ) {
-    const { children, ...otherProps } = props;
-    Object.keys(otherProps).forEach(attr => {
-      if (attr === 'className') {
-        domElement.className = otherProps[attr];
-      } else if (attr === 'onClick') {
-        const listener = otherProps[attr];
-        if (domElement.__ourVeryHackCacheOfEventListeners) {
-          domElement.__ourVeryHackCacheOfEventListeners.push(listener)
-        } else {
-          domElement.__ourVeryHackCacheOfEventListeners = [ listener ]
-        }
-        domElement.addEventListener('click', listener);
-      } else {
-        throw new Error('TODO: We haven\'t handled other properties/attributes')
-      }
-    })
-    
+  finalizeInitialChildren(domElement, type, props, rootContainerInstance, hostContext ) {
     console.log('finalizeInitialChildren', domElement, type, props, rootContainerInstance, hostContext);
+
+    // attach event listeners
   },
 
-  prepareUpdate(
-    domElement,
-    type,
-    oldProps,
-    newProps,
-    rootContainerInstance,
-    hostContext
-  ) {
-    const propKeys = new Set(
-      Object.keys(newProps).concat(
-        Object.keys(oldProps)
-      )
-    ).values();
-    const payload = [];
-    for (let key of propKeys) {
-      if (
-        key !== 'children' && // text children are already handled
-        oldProps[key] !== newProps[key]
-      ) {
-        payload.push({ [key]: newProps[key] })
-      }
-    }
-    return payload;
+  prepareUpdate(domElement, type, oldProps, newProps, rootContainerInstance, hostContext) {
+    console.log('prepareUpdate', domElement, type, oldProps, newProps);
+
+    //return a payload object that indicates which update should be done
+
+    return {};
   },
 
   shouldSetTextContent(type, props) {
+    console.log('shouldSetTextContent');
     return false; // || true;
   },
 
@@ -102,18 +59,8 @@ const hostConfig = {
     console.log('shouldDeprioritizeSubtree');
   },
 
-  createTextInstance(
-    text,
-    rootContainerInstance,
-    hostContext,
-    internalInstanceHandle
-  ) {
-    console.log(
-      'createTextInstance',
-      text,
-      rootContainerInstance,
-      hostContext,
-    );
+  createTextInstance(text, rootContainerInstance, hostContext, internalInstanceHandle) {
+    console.log('createTextInstance', text, rootContainerInstance, hostContext,);
     return document.createTextNode(text);
   },
 
@@ -133,27 +80,8 @@ const hostConfig = {
     console.log('commitMount');
   },
 
-  commitUpdate(
-    domElement,
-    updatePayload,
-    type,
-    oldProps,
-    newProps,
-    internalInstanceHandle
-  ) {
-    updatePayload.forEach(update => {
-      Object.keys(update).forEach(key => {
-        if (key === 'onClick') {
-          domElement.__ourVeryHackCacheOfEventListeners.forEach(listener => { // To prevent leak
-            domElement.removeEventListener('click', listener)
-          })
-          domElement.__ourVeryHackCacheOfEventListeners = [ update[key] ];
-          domElement.addEventListener('click', update[key])
-        } else {
-          domElement[key] = update[key];
-        }
-      })
-    })
+  commitUpdate(domElement, updatePayload, type, oldProps, newProps, internalInstanceHandle) {
+    // run the update payload
   },
 
   resetTextContent(domElement) {
@@ -172,7 +100,7 @@ const hostConfig = {
 
   appendChildToContainer(container, child) {
     console.log('appendChildToContainer', container, child);
-    container.appendChild(child)
+    container.push(child); 
   },
 
   insertBefore(parentInstance, child, beforeChild) {
@@ -189,27 +117,41 @@ const hostConfig = {
   },
 
   removeChildFromContainer(container, child) {
-    console.log('removeChildFromContainer');
+    console.log('removeChildFromContainer', container, child);
     container.removeChild(child);
   }
 };
 
-
-const DOMRenderer = ReactReconciler(hostConfig);
+const LPRenderer = ReactReconciler(hostConfig);
 
 let internalContainerStructure;
 export default {
-  render(elements, containerNode, callback) {
-
-    // We must do this only once
+  render(elements, launchpad, callback) {
+    const rootContainer = []
     if (!internalContainerStructure) {
-      internalContainerStructure = DOMRenderer.createContainer(
-        containerNode,
-        false,
-        false
-      );
+      internalContainerStructure = LPRenderer.createContainer(rootContainer, false, false);
     }
 
-    DOMRenderer.updateContainer(elements, internalContainerStructure, null, callback);
+    LPRenderer.updateContainer(elements, internalContainerStructure, null, callback);
   }
 }
+
+export function Button(props) {
+  const { onPress, onRelease, x, y, color } = props;
+
+  if (onRelease) {
+    console.warn('onRelease is not implemented yet');
+  }
+
+  return <bier x={x} y={y} color={color} />
+}
+
+export function FunctionX(props) {
+  return <bar />
+}
+
+export function FunctionY(props) {
+  return <foo />
+}
+
+export { Color } from 'lunchpad'
