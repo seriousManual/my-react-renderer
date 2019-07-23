@@ -31,7 +31,7 @@ const hostConfig = {
     
     switch (type) {
       case 'button':
-          return new ButtonElement(rootContainerInstance, props);
+          return new ButtonElement(props);
       case 'launchpad':
         return new LaunchpadElement(rootContainerInstance, props);
       default:
@@ -89,7 +89,7 @@ const hostConfig = {
 
   commitUpdate(domElement, updatePayload, type, oldProps, newProps, internalInstanceHandle) {
     // run the update payload
-    console.log('commitUpdate', domElement, updatePayload, type, oldProps, newProps)
+    console.log('commitUpdate', {domElement, updatePayload, type, oldProps, newProps})
   },
 
   resetTextContent(domElement) {
@@ -120,7 +120,8 @@ const hostConfig = {
   },
 
   removeChild(parentInstance, child) {
-    console.log('removeChild', parentInstance, child);
+    console.log('removeChild', {parentInstance, child});
+    return child.destroy();
     parentInstance.removeChild(child);
   },
 

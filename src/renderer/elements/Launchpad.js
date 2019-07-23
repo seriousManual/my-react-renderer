@@ -9,12 +9,10 @@ export default class Launchpad {
   
     // Remove children
     removeChild(child) {
-      const index = this.children.indexOf(child);
-      this.children.splice(index, 1);
+      console.log('lp:removeChild', child);
     }
   
     render() {
       return this.children.map(c => c.render());
     }
-
 }

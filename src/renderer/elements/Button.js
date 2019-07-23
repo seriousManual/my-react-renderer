@@ -1,9 +1,7 @@
 import { Color } from 'lunchpad'
 
 export default class Button {
-    constructor(lp, {x, y, color}) {
-        this._lp = lp;
-        
+    constructor({x, y, color}) {
         if (x === undefined || y === undefined || color === undefined) {
             throw new Error('x, y or color missing');
         }
@@ -11,6 +9,10 @@ export default class Button {
         this._x = x;
         this._y = y;
         this._color = color;
+    }
+
+    render() {
+        return  [this._execute()];
     }
 
     update({x, y, color}) {
@@ -25,7 +27,7 @@ export default class Button {
     }
 
     destroy() {
-        return [this._unset()];
+        return [this._setProps(this._x, this._y, Color.BLACK)];
     }
 
     _setProps(x, y, color) {
@@ -33,10 +35,10 @@ export default class Button {
         this._y = y;
         this._color = color;
 
-        return ['setSquare', x, y, color];
+        return this._execute();
     }
 
-    _unset() {
-        return ['setSquare', this._x, this._y, Color.BLACK];
+    _execute() {
+        return ['setSquare', this._x, this._y, this._color]
     }
 }
