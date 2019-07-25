@@ -12,6 +12,8 @@ export default class Root {
     }
   
     render() {
-      return this.children.map(c => c.render());
+      for (const child of this.children) {
+        child.render();
+      }
     }
   }

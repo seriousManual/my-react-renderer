@@ -33,7 +33,7 @@ const hostConfig = {
       case 'button':
           return new ButtonElement(props);
       case 'launchpad':
-        return new LaunchpadElement(rootContainerInstance, props);
+        return new LaunchpadElement(props);
       default:
         return null;
     }
@@ -52,10 +52,15 @@ const hostConfig = {
   },
 
   prepareUpdate(lpElement, type, oldProps, newProps, rootContainerInstance, hostContext) {
+    if (type === 'button') {
+      console.log(lpElement.update(newProps), 'bier?');
+      return lpElement.update(newProps);
+    }
+
     console.log('prepareUpdate', lpElement, type, oldProps, newProps);
 
     return {};
-  },
+  }, 
 
   shouldSetTextContent(type, props) {
     // console.log('shouldSetTextContent');
@@ -87,9 +92,9 @@ const hostConfig = {
     console.log('commitMount', domElement, type, newProps, internalInstanceHandle);
   },
 
-  commitUpdate(domElement, updatePayload, type, oldProps, newProps, internalInstanceHandle) {
+  commitUpdate(lpElement, updatePayload, type, oldProps, newProps, internalInstanceHandle) {
     // run the update payload
-    console.log('commitUpdate', {domElement, updatePayload, type, oldProps, newProps})
+    console.log('commitUpdate', {domElement: lpElement, updatePayload, type, oldProps, newProps})
   },
 
   resetTextContent(domElement) {
@@ -121,7 +126,6 @@ const hostConfig = {
 
   removeChild(parentInstance, child) {
     console.log('removeChild', {parentInstance, child});
-    return child.destroy();
     parentInstance.removeChild(child);
   },
 

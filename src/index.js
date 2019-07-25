@@ -11,15 +11,21 @@ class App extends Component {
   }
 
   componentDidMount() {
-    setTimeout(() => this.setState({foo: !this.state.foo}), 3000);
+    setTimeout(() => {
+      console.log('-----------------------------------');
+      this.setState({foo: !this.state.foo});
+    }, 3000);
   }
 
   render() {
-    const color = this.state.foo ? Color.RED : Color.GREEN;
-  
     return (
       <launchpad launchpad={getMock()}>
-        {this.state.foo ? <button x={0} y={0} color={color} /> : null}
+        {this.state.foo ? <button x={0} y={0} color={Color.RED} /> : null }
+        
+        <button x={5} y={5} color={this.state.foo ? Color.RED : Color.GREEN} />
+
+        <button x={this.state.foo ? 0 : 7} y={7} color={Color.RED} />
+
         {/* <FunctionX x={0} color={Color.RED} onPress={() => console.log('hepp')} />
         <FunctionY y={0} color={Color.RED} onPress={() => console.log('hepp')} /> */}
       </launchpad>

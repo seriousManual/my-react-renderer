@@ -6,6 +6,14 @@ export default class Button {
             throw new Error('x, y or color missing');
         }
 
+        if (x < 0 || x > 7) {
+            throw new Error(`x is outside bounds (0-7): "${x}"`);
+        }
+
+        if (y < 0 || y > 7) {
+            throw new Error(`y is outside bounds (0-7): "${y}"`);
+        }
+
         this._x = x;
         this._y = y;
         this._color = color;
@@ -16,9 +24,9 @@ export default class Button {
     }
 
     update({x, y, color}) {
-        const updates = [];
+        let updates = [];
         if (this._x !== x || this._y !== y) {
-            updates.push(this._unset);
+            updates = updates.concat(this.destroy());
         }
 
         updates.push(this._setProps(x, y, color));
@@ -39,6 +47,6 @@ export default class Button {
     }
 
     _execute() {
-        return ['setSquare', this._x, this._y, this._color]
+        return {setSquare: [this._x, this._y, this._color]}
     }
 }
