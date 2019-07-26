@@ -8,13 +8,10 @@ export default class FunctionY {
 
     setLaunchpad(launchpad) {
         this._launchpad = launchpad;
+        this.render();
     }
 
     render() {
-        if (!this._launchpad) {
-            console.warn('nu?');
-        }
-
         this._launchpad.setFunctionY(this._y, this._color);
     }
 

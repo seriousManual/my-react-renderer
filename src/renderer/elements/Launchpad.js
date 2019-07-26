@@ -10,7 +10,6 @@ export default class Launchpad {
     appendChild(child) {
       child.setLaunchpad(this._lp);
       this.children.push(child);
-      child.render();
     }
   
     removeChild(child) {
@@ -18,11 +17,5 @@ export default class Launchpad {
       this.children.splice(index, 1);
 
       child.destroy();
-    }
-  
-    render() {
-      for (const child of this.children) {
-        child.render();
-      }
     }
 }

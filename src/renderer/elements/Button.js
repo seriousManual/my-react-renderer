@@ -5,39 +5,68 @@ export default class Button {
         this._x = x;
         this._y = y;
         this._color = color || Color.BLACK;
+        this._onPress = onPress || undefined;
+        this._onPressWrapped = undefined;
     }
 
     setLaunchpad(launchpad) {
         this._launchpad = launchpad;
+
+        this.render();
     }
 
     render() {
-        if (!this._launchpad) {
-            console.warn('nu?');
-        }
-
+        console.log('--------------', this._launchpad);
         this._launchpad.setSquare(this._x, this._y, this._color);
+        this._registerEventHandler();
     }
 
-    prepareUpdate({x, y}) {
+    prepareUpdate({x, y, onPress}) {
         if (this._x !== x || this._y !== y) {
             this.destroy();
         }
+
+        if (this._onPress && this._onPress !== onPress) {
+            this._removeEventListener();
+        }
     }
 
-    update({x, y, color}) {
-        this._setProps(x, y, color);
-    }
-
-    destroy() {
-        return this._setProps(this._x, this._y, Color.BLACK);
-    }
-
-    _setProps(x, y, color) {
+    update({x, y, color = Color.BLACK, onPress}) {
         this._x = x;
         this._y = y;
         this._color = color;
+        this._onPress = onPress;
 
-        return this.render();
+        this.render();
+    }
+
+    destroy() {
+        this.update({x: this._x, y: this._y, color: Color.BLACK});
+        this._removeEventListener();
+    }
+
+    _registerEventHandler() {
+        if (!this._onPress) {
+            return;
+        }
+
+        this._onPressWrapped = (x, y) => {
+            if (x !== this._x || y !== this._y) {
+                return;
+            }
+
+            this._onPress();
+        };
+
+        this._launchpad.on('input', this._onPressWrapped);
+    }
+
+    _removeEventListener() {
+        if (!this._onPressWrapped) {
+            return;
+        }
+
+        this._launchpad.removeListener('input', this._onPressWrapped);
+        this._onPressWrapped = null;
     }
 }

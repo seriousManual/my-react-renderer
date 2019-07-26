@@ -8,13 +8,10 @@ export default class FunctionX {
 
     setLaunchpad(launchpad) {
         this._launchpad = launchpad;
+        this.render();
     }
 
     render() {
-        if (!this._launchpad) {
-            console.warn('nu?');
-        }
-
         this._launchpad.setFunctionX(this._x, this._color);
     }
 
