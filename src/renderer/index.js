@@ -1,5 +1,7 @@
 import ReactReconciler from 'react-reconciler';
 import ButtonElement from './elements/Button';
+import FunctionXElement from './elements/FunctionX';
+import FunctionYElement from './elements/FunctionY';
 import RootElement from './elements/Root';
 import LaunchpadElement from './elements/Launchpad';
 
@@ -34,6 +36,10 @@ const hostConfig = {
           return new ButtonElement(props);
       case 'launchpad':
         return new LaunchpadElement(props);
+      case 'functionX':
+        return new FunctionXElement(props);
+      case 'functionY':
+        return new FunctionYElement(props);
       default:
         return null;
     }
@@ -52,12 +58,11 @@ const hostConfig = {
   },
 
   prepareUpdate(lpElement, type, oldProps, newProps, rootContainerInstance, hostContext) {
-    if (type === 'button') {
-      console.log(lpElement.update(newProps), 'bier?');
-      return lpElement.update(newProps);
-    }
-
     console.log('prepareUpdate', lpElement, type, oldProps, newProps);
+
+    if (type === 'button') {
+      lpElement.prepareUpdate(newProps);
+    }
 
     return {};
   }, 
@@ -93,8 +98,12 @@ const hostConfig = {
   },
 
   commitUpdate(lpElement, updatePayload, type, oldProps, newProps, internalInstanceHandle) {
-    // run the update payload
-    console.log('commitUpdate', {domElement: lpElement, updatePayload, type, oldProps, newProps})
+    console.log('commitUpdate', {lpElement, updatePayload, type, oldProps, newProps, internalInstanceHandle})
+    
+    if (type === 'button') {
+      lpElement.update(newProps);
+    }
+    
   },
 
   resetTextContent(domElement) {

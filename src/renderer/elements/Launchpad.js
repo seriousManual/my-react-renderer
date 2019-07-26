@@ -8,33 +8,21 @@ export default class Launchpad {
     }
   
     appendChild(child) {
+      child.setLaunchpad(this._lp);
       this.children.push(child);
-      this.executeOrders(child.render());
+      child.render();
     }
   
-    // Remove children
     removeChild(child) {
       const index = this.children.indexOf(child);
       this.children.splice(index, 1);
 
-      this.executeOrders(child.destroy());
+      child.destroy();
     }
   
     render() {
-      const orders = this.children.reduce((carray, child) => {
-        carray = carray.concat(child.render());
-        return carray;
-      }, []);
-
-      this.executeOrders(orders);
-    }
-
-    executeOrders(orders) {
-      for(const order of orders) {
-        Object.keys(order).forEach(key => {
-          // console.log(key, order[key]);
-          this._lp[key](...order[key])
-        })
+      for (const child of this.children) {
+        child.render();
       }
     }
 }

@@ -1,41 +1,36 @@
 import { Color } from 'lunchpad'
 
 export default class Button {
-    constructor({x, y, color}) {
-        if (x === undefined || y === undefined || color === undefined) {
-            throw new Error('x, y or color missing');
-        }
-
-        if (x < 0 || x > 7) {
-            throw new Error(`x is outside bounds (0-7): "${x}"`);
-        }
-
-        if (y < 0 || y > 7) {
-            throw new Error(`y is outside bounds (0-7): "${y}"`);
-        }
-
+    constructor({x, y, color, onPress}) {
         this._x = x;
         this._y = y;
-        this._color = color;
+        this._color = color || Color.BLACK;
+    }
+
+    setLaunchpad(launchpad) {
+        this._launchpad = launchpad;
     }
 
     render() {
-        return  [this._execute()];
+        if (!this._launchpad) {
+            console.warn('nu?');
+        }
+
+        this._launchpad.setSquare(this._x, this._y, this._color);
+    }
+
+    prepareUpdate({x, y}) {
+        if (this._x !== x || this._y !== y) {
+            this.destroy();
+        }
     }
 
     update({x, y, color}) {
-        let updates = [];
-        if (this._x !== x || this._y !== y) {
-            updates = updates.concat(this.destroy());
-        }
-
-        updates.push(this._setProps(x, y, color));
-
-        return updates;
+        this._setProps(x, y, color);
     }
 
     destroy() {
-        return [this._setProps(this._x, this._y, Color.BLACK)];
+        return this._setProps(this._x, this._y, Color.BLACK);
     }
 
     _setProps(x, y, color) {
@@ -43,10 +38,6 @@ export default class Button {
         this._y = y;
         this._color = color;
 
-        return this._execute();
-    }
-
-    _execute() {
-        return {setSquare: [this._x, this._y, this._color]}
+        return this.render();
     }
 }
