@@ -127,6 +127,7 @@ const hostConfig = {
 
   insertBefore(parentInstance, child, beforeChild) {
     console.log('insertBefore');
+    parentInstance.appendChild(child);
   },
 
   insertInContainerBefore(container, child, beforeChild) {

@@ -16,7 +16,6 @@ export default class Button {
     }
 
     render() {
-        console.log('--------------', this._launchpad);
         this._launchpad.setSquare(this._x, this._y, this._color);
         this._registerEventHandler();
     }
