@@ -1,9 +1,13 @@
+import debug from 'debug';
 import ReactReconciler from 'react-reconciler';
+
 import ButtonElement from './elements/Button';
 import FunctionXElement from './elements/FunctionX';
 import FunctionYElement from './elements/FunctionY';
 import RootElement from './elements/Root';
 import LaunchpadElement from './elements/Launchpad';
+
+const myDebug = debug('react-lp');
 
 const hostConfig = {
   getRootHostContext(rootContainerInstance) {

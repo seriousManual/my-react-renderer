@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import LaunchpadRenderer, { Color } from './renderer'
 import getMock from './renderer/mockLP'
 import { initialize } from 'lunchpad'
-
+import BigPad from './renderer/components/BigPad'
 
 class App extends Component {
   constructor() {
@@ -15,21 +15,21 @@ class App extends Component {
     setInterval(() => {
       this.setState({foo: !this.state.foo});
       console.log('--------------------------------------------------------------------------');
-    }, 5000);
+    }, 1000);
   }
  
   render() {
     const foo = Math.random()
     return (
       <launchpad launchpad={this.props.launchpad}>
-        {this.state.foo ? <button x={1} y={3} color={Color.RED} onPress={() => console.log('bier')} /> : null }
 
-        <button x={5} y={2} color={this.state.foo ? Color.RED : Color.GREEN} />
 
-        <button x={this.state.foo ? 0 : 7} y={7} color={Color.RED} />
-
-        <functionX x={2} color={Color.RED} />
-        <functionY y={2} color={Color.RED} />
+        <BigPad>
+          <button x={0} y={0} color={Color.RED} />
+          <button x={3} y={8} color={Color.RED} />
+          <button x={8} y={6} color={Color.RED} />
+          <button x={8} y={8} color={Color.RED} />
+        </BigPad>
 
       </launchpad>
     );
