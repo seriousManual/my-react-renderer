@@ -31,6 +31,10 @@ export default class Button {
     }
 
     update({x, y, color = Color.BLACK, onPress}) {
+        if (this._x === x && this._y === y && this._color.getCode() === color.getCode() && this._onPress === onPress) {
+            return;
+        }
+
         this._x = x;
         this._y = y;
         this._color = color;

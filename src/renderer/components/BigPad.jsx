@@ -1,17 +1,14 @@
 import React, { Component, Children } from 'react'
-import { Color } from 'lunchpad'
 
 class BigPad extends Component {
     
 
     render() {
-        console.log(this.props.children )
-
-        return Children.map(this.props.children, child => {
+        const {children, ...restProps} = this.props;
+        const buttons = Children.map(children, child => {
             const props = child.props;
 
             if (props.x === 8 && props.y === 8) {
-                console.warn('nice try :)');
                 return null;
             }
 
@@ -22,9 +19,11 @@ class BigPad extends Component {
             if (props.y === 8) {
                 return <functionX x={props.x} onPress={props.onPress} color={props.color} />
             }
-console.log(props);
+
             return <button {...props} />
-        })
+        });
+
+        return <launchpad {...restProps}>{buttons}</launchpad>
     }
 }
 
