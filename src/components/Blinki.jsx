@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Color } from 'react';
+import { Color } from 'lunchpad';
 
 class Blinki extends Component {
     constructor() {
@@ -16,7 +16,7 @@ class Blinki extends Component {
    
     render() {
       const altColor = this.props.altColor || Color.BLACK;
-      return <button x={this.props.x} y={this.props.y} color={this.state.active ? this.props.color : altColor} />
+      return <button x={this.props.x} y={this.props.y} color={this.state.active ? this.props.color : altColor} onPress={this.props.onPress} />
     }
 }
 

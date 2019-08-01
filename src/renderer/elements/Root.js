@@ -9,6 +9,8 @@ export default class Root {
     removeChild(child) {
       const index = this.children.indexOf(child);
       this.children.splice(index, 1);
+
+      child.destroy();
     }
   
     render() {

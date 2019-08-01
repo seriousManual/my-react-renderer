@@ -8,11 +8,11 @@ class App extends Component {
       this.state = { buttons: [] };
     }
   
-    componentDidMount() {
-      setInterval(() => {
-        this.setState({foo: !this.state.foo});
-      }, 100);
-    }
+    // componentDidMount() {
+    //   setInterval(() => {
+    //     this.setState({foo: !this.state.foo});
+    //   }, 1000);
+    // }
    
     addButton(x, y) {
       const buttons = [].concat(this.state.buttons);
@@ -24,8 +24,10 @@ class App extends Component {
       return (
         <launchpad launchpad={this.props.launchpad} onButtonPress={(x, y) => this.addButton(x, y)}>
           {this.state.buttons.map(({x, y}) => <button x={x} y={y} color={Color.getRandomColor()} />)}
-    
+
           <functionY y={0} color={Color.RED} onPress={() => this.setState({buttons: []})} />
+
+          <functionX x={0} color={Color.GREEN} onPress={() => this.setState({buttons: []})} />
         </launchpad>
       );
     }

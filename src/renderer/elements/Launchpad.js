@@ -32,4 +32,18 @@ export default class Launchpad {
 
       child.destroy();
     }
+
+    destroy() {
+      if (this._onButtonPress) {
+        this._lp.removeListener('input', this._onButtonPress);
+      }
+
+      if (this._onFunctionXPress) {
+        this._lp.removeListener('functionX', this._onFunctionXPress);
+      }
+
+      if (this._onFunctionYPress) {
+        this._lp.removeListener('functionY', this._onFunctionYPress);
+      }
+    }
 }
