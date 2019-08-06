@@ -13,11 +13,11 @@ export default class Button {
         this._launchpad = launchpad;
 
         this.render();
+        this._registerEventHandler();
     }
 
     render() {
         this._launchpad.setSquare(this._x, this._y, this._color);
-        this._registerEventHandler();
     }
 
     prepareUpdate({x, y, onPress}) {
@@ -31,14 +31,19 @@ export default class Button {
     }
 
     update({x, y, color = Color.BLACK, onPress}) {
-        if (this._x === x && this._y === y && this._color.getCode() === color.getCode() && this._onPress === onPress) {
+        if (this._onPress !== onPress) {
+            this._onPress = onPress;
+            this._removeEventListener();
+            this._registerEventHandler();
+        }
+
+        if (this._x === x && this._y === y && this._color.getCode() === color.getCode()) {
             return;
         }
 
         this._x = x;
         this._y = y;
         this._color = color;
-        this._onPress = onPress;
 
         this.render();
     }
@@ -53,6 +58,7 @@ export default class Button {
             return;
         }
 
+        console.log('register');
         this._onPressWrapped = (x, y) => {
             if (x !== this._x || y !== this._y) {
                 return;
@@ -69,6 +75,7 @@ export default class Button {
             return;
         }
 
+        console.log('unregister');
         this._launchpad.removeListener('input', this._onPressWrapped);
         this._onPressWrapped = null;
     }

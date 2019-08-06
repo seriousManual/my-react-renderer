@@ -3,33 +3,33 @@ import { Color } from 'lunchpad';
 
 class Mock extends EventEmitter {
     pad = [
-        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', null],
-        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+        [Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, null],
+        [Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK],
+        [Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK],
+        [Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK],
+        [Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK],
+        [Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK],
+        [Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK],
+        [Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK],
+        [Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK],
     ];
 
     setSquare(x, y, color) {
-        this.pad[-1 * y + 8][x] = this.mapColor(color);
+        this.pad[-1 * y + 8][x] = color;
         this.draw();
 
         return this;
     }
 
     setFunctionX(x, color) {
-        this.pad[0][x] = this.mapColor(color);
+        this.pad[0][x] = color;
         this.draw();
 
         return this;
     }
 
     setFunctionY(y, color) {
-        this.pad[-1 * y + 8][8] = this.mapColor(color);
+        this.pad[-1 * y + 8][8] = color;
         this.draw();
 
         return this;
@@ -42,12 +42,15 @@ class Mock extends EventEmitter {
     }
 
     draw() {
-        let row = 1;
-        for (const y of this.pad) {
-            console.log(`${row * -1 + 9}  |  ${y.join(' ')}`);
-            row++;
-        }
-        console.log('--------------------------------')
+        // console.log(this.pad);
+        // let row = 1;
+        // for (const xRow of this.pad) {
+        //     const xRowString = xRow.map(color => this.mapColor(color)).join(' ');
+        //     console.log(`${row * -1 + 9}  |  ${xRowString}`);
+        //     row++;
+        // }
+        // console.log('--------------------------------')
+        this.emit('rerender');
     }
 
     mapColor(color) {

@@ -6,17 +6,24 @@ class Blinki extends Component {
       super();
   
       this.state = {active: true};
+      this._interval = null;
     }
   
     componentDidMount() {
-      setInterval(() => {
+      this._interval = setInterval(() => {
         this.setState({active: !this.state.active});
       }, 300);
+    }
+
+    componentWillUnmount() {
+      clearInterval(this._interval);
     }
    
     render() {
       const altColor = this.props.altColor || Color.BLACK;
-      return <button x={this.props.x} y={this.props.y} color={this.state.active ? this.props.color : altColor} onPress={this.props.onPress} />
+      const color = this.state.active ? this.props.color : altColor;
+
+      return <button x={this.props.x} y={this.props.y} color={color} onPress={this.props.onPress} />
     }
 }
 

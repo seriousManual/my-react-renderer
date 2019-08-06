@@ -5,7 +5,7 @@ import Blinki from '../../components/Blinki';
 
 const MAX_COLS = 8;
 const MAX_ROWS = 8;
-const STEP_DELAY_MS = 100;
+const STEP_DELAY_MS = 500;
 const COLORS = [Color.RED, Color.GREEN, Color.AMBER];
 const MODE_DRAW = 'mode_draw';
 const MODE_EXEC = 'mode_exec';
@@ -20,9 +20,11 @@ export default class GameOfLife extends React.Component {
                 Array.from({ length: MAX_COLS }, () => false)
             )
         }
+
+        this._interval = null;
     }
 
-    draw(x, y) {
+    setButton(x, y) {
         console.log(x, y, this.state.board);
         //bad style, don't try this at home
         const foo = this.state.board;
@@ -32,10 +34,11 @@ export default class GameOfLife extends React.Component {
     }
 
     printBoard() {
-        return this.state.board.reduce((allEntries, row, y) => {
-            const rowEntries = row.map((entry, x) => {
+        return this.state.board.reduce((allEntries, row, x) => {
+            
+            const rowEntries = row.map((entry, y) => {
                 if (entry) {
-                    return <button x={x} y={y} color={Color.RED} />
+                    return <button x={x} y={y} key={x + '_' + y} color={Color.RED} />
                 }
             });
 
@@ -45,18 +48,37 @@ export default class GameOfLife extends React.Component {
         }, []);
     }
 
+    execute() {
+        this.setState({mode: MODE_EXEC})
+
+        this._interval = setInterval(() => {
+            const newBoard = calculateNewBoard(this.state.board)
+            this.setState({board: newBoard})
+        }, STEP_DELAY_MS)
+    }
+
+    draw() {
+        this.setState({mode: MODE_DRAW})
+
+        if (this._interval) {
+            clearInterval(this._interval);
+            this._interval = null;
+        }
+    }
+
     render() {
         if (this.state.mode === MODE_DRAW) {
             return (
-                <launchpad launchpad={this.props.launchpad} onButtonPress={(x, y) => this.draw(x, y)}>
+                <launchpad launchpad={this.props.launchpad} onButtonPress={(x, y) => this.setButton(x, y)}>
                     { this.printBoard() }
-                    <button x={0} y={0} color={Color.RED} onPress={() => this.setState({mode: MODE_EXEC})} />
+                    <button x={0} y={0} color={Color.RED} onPress={() => this.execute()} />
                 </launchpad>
             );
         } else if (this.state.mode === MODE_EXEC) {
             return (
                 <launchpad launchpad={this.props.launchpad}>
-                    <Blinki x={0} y={0} color={Color.GREEN} onPress={() => this.setState({mode: MODE_EXEC})} />
+                    { this.printBoard() }
+                    <Blinki x={0} y={0} color={Color.GREEN} onPress={() => this.draw()} />
                 </launchpad>
             );
         }
@@ -127,45 +149,46 @@ export default class GameOfLife extends React.Component {
 //     }
 // }
 
-// function calculateNewBoard(board, cycle) {
-//     const newBoard = [];
+function calculateNewBoard(board, cycle = true) {
+    const newBoard = [];
 
-//     for (let x = 0; x < board.length; x++) {
-//         newBoard[x] = Array.from({length: MAX_COLS}, () => 0);
-//         for (let y = 0; y < board[x].length; y++) {
-//             const count = countNeighbours(board, x, y);
-//             const isAlive = board[x][y] > 0
+    for (let x = 0; x < board.length; x++) {
+        newBoard[x] = Array.from({length: MAX_COLS}, () => false);
 
-//             if (!isAlive) {
-//                 if (count === 3) newBoard[x][y] = cycle;
-//             } else {
-//                 if (count === 1 || count === 0) newBoard[x][y] = 0;
-//                 if (count === 2 || count === 3) newBoard[x][y] = board[x][y];
-//                 if (count > 3) newBoard[x][y] = 0;
-//             }
-//         }
-//     }
+        for (let y = 0; y < board[x].length; y++) {
+            const count = countNeighbours(board, x, y);
+            const isAlive = board[x][y] > 0
 
-//     return newBoard;
-// }
+            if (!isAlive) {
+                if (count === 3) newBoard[x][y] = cycle;
+            } else {
+                if (count === 1 || count === 0) newBoard[x][y] = 0;
+                if (count === 2 || count === 3) newBoard[x][y] = board[x][y];
+                if (count > 3) newBoard[x][y] = 0;
+            }
+        }
+    }
 
-// function countNeighbours(matrix, x, y) {
-//     let count = 0;
-//     let size = matrix.length;
+    return newBoard;
+}
 
-//     let left = (x == 0) ? size - 1 : x - 1;
-//     let right = (x == size - 1) ? 0 : x + 1;
-//     let top = (y == size - 1) ? 0 : y + 1;
-//     let bottom = (y == 0) ? size - 1 : y - 1;
+function countNeighbours(matrix, x, y) {
+    let count = 0;
+    let size = matrix.length;
 
-//     if (matrix[left][y]) count++;
-//     if (matrix[left][top]) count++;
-//     if (matrix[x][top]) count++;
-//     if (matrix[right][top]) count++;
-//     if (matrix[right][y]) count++;
-//     if (matrix[right][bottom]) count++;
-//     if (matrix[x][bottom]) count++;
-//     if (matrix[left][bottom]) count++;
+    let left = (x == 0) ? size - 1 : x - 1;
+    let right = (x == size - 1) ? 0 : x + 1;
+    let top = (y == size - 1) ? 0 : y + 1;
+    let bottom = (y == 0) ? size - 1 : y - 1;
 
-//     return count;
-// }
+    if (matrix[left][y]) count++;
+    if (matrix[left][top]) count++;
+    if (matrix[x][top]) count++;
+    if (matrix[right][top]) count++;
+    if (matrix[right][y]) count++;
+    if (matrix[right][bottom]) count++;
+    if (matrix[x][bottom]) count++;
+    if (matrix[left][bottom]) count++;
+
+    return count;
+}

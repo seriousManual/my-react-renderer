@@ -4,22 +4,30 @@ export default class Square extends React.Component {
     render () {
         let {color, onSelect, round} = this.props
 
-        let size = 40
+        if (!onSelect) {
+            onSelect = () => console.log('bier');
+        }
+
+        let size = 60
         let style = {
             boxSizing: 'border-box',
-            backgroundColor: color.getRgb(),
+            backgroundColor: this._getColor(color),
             width: size + 'px',
             height: size + 'px',
-            float: 'left',
             margin: '5px',
-            border: '3px solid #666',
-            transition: 'background-color 100ms linear'
+            border: '1px solid grey',
+            boxShadow: '0px 0px 10px 0px ' + this._getColor(color),
+            // transition: 'background-color 50ms linear'
         }
 
         if (round) {
             style.borderRadius = (size / 2) + 'px'
         }
 
-        return <div style={style} onClick={onSelect}></div>;
+        return <div style={style} onClick={() => onSelect(this.props.x, this.props.y)}></div>;
+    }
+
+    _getColor(color) {
+        return color ? color.getRgb() : '#000';
     }
 }
