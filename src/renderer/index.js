@@ -1,5 +1,6 @@
 import debug from 'debug';
 import ReactReconciler from 'react-reconciler';
+import * as scheduler from 'scheduler';
 
 import ButtonElement from './elements/Button';
 import FunctionXElement from './elements/FunctionX';
@@ -83,8 +84,11 @@ const hostConfig = {
   now: Date.now,
 
   isPrimaryRenderer: true,
-  scheduleDeferredCallback: "",
-  cancelDeferredCallback: "",
+
+  scheduleDeferredCallback: scheduler.unstable_scheduleCallback,
+  cancelDeferredCallback: scheduler.unstable_cancelCallback,
+  schedulePassiveEffects: scheduler.unstable_scheduleCallback,
+  cancelPassiveEffects: scheduler.unstable_cancelCallback,
 
   // -------------------
   //     Mutation
