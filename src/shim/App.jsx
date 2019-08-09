@@ -1,16 +1,18 @@
 import React from 'react'
 
 import Button from './Button.jsx'
-import {Color} from 'lunchpad'
+
 
 export default class App extends React.Component {
     selectSquare(x, y, launchpad) {
         if (x === 8) {
             launchpad.emit('functionY', y);
+            return;
         }
 
         if (y === 8) {
             launchpad.emit('functionX', x);
+            return;
         }
 
         launchpad.emit('input', x, y);
@@ -27,6 +29,10 @@ export default class App extends React.Component {
             buttons.push(localButtons);
 
             for (const color of xRow) {
+                if (x === 8 && y === 0) {
+                    continue;
+                }
+
                 localButtons.push(<Button key={x + '_' + y}
                     color={color}
                     round={x === 8 || y === 0}

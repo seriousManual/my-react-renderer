@@ -1,5 +1,8 @@
 import { EventEmitter } from 'events';
 import { Color } from 'lunchpad';
+import debug from 'debug'
+
+const mockDebug = debug('react-lp:mock');
 
 class Mock extends EventEmitter {
     pad = [
@@ -15,6 +18,7 @@ class Mock extends EventEmitter {
     ];
 
     setSquare(x, y, color) {
+        mockDebug('setSquare', x, y, color);
         this.pad[-1 * y + 8][x] = color;
         this.draw();
 
@@ -22,6 +26,7 @@ class Mock extends EventEmitter {
     }
 
     setFunctionX(x, color) {
+        mockDebug('setFunctionX', x, color);
         this.pad[0][x] = color;
         this.draw();
 
@@ -29,6 +34,7 @@ class Mock extends EventEmitter {
     }
 
     setFunctionY(y, color) {
+        mockDebug('setFunctionY', y, color);
         this.pad[-1 * y + 8][8] = color;
         this.draw();
 
@@ -36,8 +42,6 @@ class Mock extends EventEmitter {
     }
 
     clearAll() {
-        console.log('clearAll')
-
         return this;
     }
 

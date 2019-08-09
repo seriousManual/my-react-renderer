@@ -1,12 +1,18 @@
 import React, { Component, Children } from 'react'
 
 class BigPad extends Component {
-    
-
     render() {
         const {children, ...restProps} = this.props;
+
         const buttons = Children.map(children, child => {
+            if (!child) {
+                return null;
+            }
+
             const props = child.props;
+            if (typeof child.type !== "string") {
+                return child;
+            }
 
             if (props.x === 8 && props.y === 8) {
                 return null;

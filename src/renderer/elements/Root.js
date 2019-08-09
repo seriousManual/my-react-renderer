@@ -7,6 +7,7 @@ export default class Root {
   
     // Remove children
     removeChild(child) {
+      console.log('remove from root');
       const index = this.children.indexOf(child);
       this.children.splice(index, 1);
 

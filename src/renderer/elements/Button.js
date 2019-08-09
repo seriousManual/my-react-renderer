@@ -33,7 +33,6 @@ export default class Button {
     update({x, y, color = Color.BLACK, onPress}) {
         if (this._onPress !== onPress) {
             this._onPress = onPress;
-            this._removeEventListener();
             this._registerEventHandler();
         }
 
@@ -58,7 +57,6 @@ export default class Button {
             return;
         }
 
-        console.log('register');
         this._onPressWrapped = (x, y) => {
             if (x !== this._x || y !== this._y) {
                 return;
@@ -75,7 +73,6 @@ export default class Button {
             return;
         }
 
-        console.log('unregister');
         this._launchpad.removeListener('input', this._onPressWrapped);
         this._onPressWrapped = null;
     }

@@ -7,18 +7,7 @@ export default class Launchpad {
       this._onFunctionXPress = onFunctionXPress;
       this._onFunctionYPress = onFunctionYPress;
 
-      // TODO: remove event listener when the element is unmounted? memory leak?
-      if (this._onButtonPress) {
-        this._lp.on('input', this._onButtonPress);
-      }
-
-      if (this._onFunctionXPress) {
-        this._lp.on('functionX', this._onFunctionXPress);
-      }
-
-      if (this._onFunctionYPress) {
-        this._lp.on('functionY', this._onFunctionYPress);
-      }
+      this._registerHandlers();
     }
   
     appendChild(child) {
@@ -33,7 +22,35 @@ export default class Launchpad {
       child.destroy();
     }
 
+    update({onButtonPress, onFunctionXPress, onFunctionYPress}) {
+      if (onButtonPress !== this._onButtonPress || onFunctionXPress !== this._onFunctionXPress || onFunctionYPress !== this.onFunctionYPress) {
+        this._unregisterHandlers();
+        this._onButtonPress = onButtonPress;
+        this._onFunctionXPress = onFunctionXPress;
+        this._onFunctionYPress = onFunctionYPress;
+        this._registerHandlers();
+      }
+    }
+
     destroy() {
+      this._unregisterHandlers();
+    }
+
+    _registerHandlers() {
+      if (this._onButtonPress) {
+        this._lp.on('input', this._onButtonPress);
+      }
+
+      if (this._onFunctionXPress) {
+        this._lp.on('functionX', this._onFunctionXPress);
+      }
+
+      if (this._onFunctionYPress) {
+        this._lp.on('functionY', this._onFunctionYPress);
+      }
+    }
+
+    _unregisterHandlers() {
       if (this._onButtonPress) {
         this._lp.removeListener('input', this._onButtonPress);
       }

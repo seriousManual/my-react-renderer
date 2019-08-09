@@ -99,7 +99,7 @@ const hostConfig = {
   commitUpdate(lpElement, updatePayload, type, oldProps, newProps, internalInstanceHandle) {
     reconcilerDebug('commitUpdate', {lpElement, updatePayload, type, oldProps, newProps, internalInstanceHandle})
     
-    if (type === 'button'  || type === 'functionX' || type === 'functionY') {
+    if (type === 'button'  || type === 'functionX' || type === 'functionY' || type === 'launchpad') {
       lpElement.update(newProps);
     }
     

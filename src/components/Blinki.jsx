@@ -4,7 +4,7 @@ import { Color } from 'lunchpad';
 class Blinki extends Component {
     constructor() {
       super();
-  
+
       this.state = {active: true};
       this._interval = null;
     }
@@ -12,7 +12,7 @@ class Blinki extends Component {
     componentDidMount() {
       this._interval = setInterval(() => {
         this.setState({active: !this.state.active});
-      }, 300);
+      }, this.props.frequency || 300);
     }
 
     componentWillUnmount() {
@@ -20,10 +20,11 @@ class Blinki extends Component {
     }
    
     render() {
-      const altColor = this.props.altColor || Color.BLACK;
-      const color = this.state.active ? this.props.color : altColor;
+      if (!this.state.active) {
+        return null;
+      }
 
-      return <button x={this.props.x} y={this.props.y} color={color} onPress={this.props.onPress} />
+      return this.props.children;
     }
 }
 

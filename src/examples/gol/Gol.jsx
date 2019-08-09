@@ -2,10 +2,11 @@ import { Color } from 'lunchpad';
 import React from 'react'
 
 import Blinki from '../../components/Blinki';
+import BigPad from '../../renderer/components/BigPad';
 
 const MAX_COLS = 8;
 const MAX_ROWS = 8;
-const STEP_DELAY_MS = 500;
+const STEP_DELAY_MS = 200;
 const COLORS = [Color.RED, Color.GREEN, Color.AMBER];
 const MODE_DRAW = 'mode_draw';
 const MODE_EXEC = 'mode_exec';
@@ -17,47 +18,51 @@ export default class GameOfLife extends React.Component {
         this.state = {
             mode: MODE_DRAW,
             board: Array.from({ length: MAX_ROWS }, () => 
-                Array.from({ length: MAX_COLS }, () => false)
-            )
+                Array.from({ length: MAX_COLS }, () => 0)
+            ),
+            frequency: STEP_DELAY_MS
         }
 
         this._interval = null;
     }
 
     setButton(x, y) {
-        console.log(x, y, this.state.board);
-        //bad style, don't try this at home
-        const foo = this.state.board;
-        foo[x][y] = true;
+        const board = this.state.board;
 
-        this.setState({board: foo});
+        if (board[x][y] > 0) {
+            board[x][y] = 0;
+        } else {
+            board[x][y] = 1;
+        }
+
+        this.setState({ board });
     }
 
     printBoard() {
-        return this.state.board.reduce((allEntries, row, x) => {
-            
-            const rowEntries = row.map((entry, y) => {
-                if (entry) {
-                    return <button x={x} y={y} key={x + '_' + y} color={Color.RED} />
+        const buttons = [];
+        this.state.board.forEach((row, x) => {
+            row.forEach((entry, y) => {
+                if (entry > 0) {
+                    const color = COLORS[entry % COLORS.length];
+                    buttons.push(<button x={x} y={y} key={x + '_' + y} color={color} />);
                 }
             });
-
-            allEntries = allEntries.concat(rowEntries);
-
-            return allEntries;
         }, []);
+
+        return buttons;
     }
 
-    execute() {
+    enterExecuteMode() {
         this.setState({mode: MODE_EXEC})
 
+        let cycle = 1;
         this._interval = setInterval(() => {
-            const newBoard = calculateNewBoard(this.state.board)
+            const newBoard = calculateNewBoard(this.state.board, cycle++)
             this.setState({board: newBoard})
         }, STEP_DELAY_MS)
     }
 
-    draw() {
+    enterDrawMode() {
         this.setState({mode: MODE_DRAW})
 
         if (this._interval) {
@@ -67,89 +72,27 @@ export default class GameOfLife extends React.Component {
     }
 
     render() {
+        const board = this.printBoard();
+
         if (this.state.mode === MODE_DRAW) {
             return (
                 <launchpad launchpad={this.props.launchpad} onButtonPress={(x, y) => this.setButton(x, y)}>
-                    { this.printBoard() }
-                    <button x={0} y={0} color={Color.RED} onPress={() => this.execute()} />
+                    { board }
+                    <functionX x={0} color={Color.RED} onPress={() => this.enterExecuteMode()} />
                 </launchpad>
             );
         } else if (this.state.mode === MODE_EXEC) {
             return (
                 <launchpad launchpad={this.props.launchpad}>
-                    { this.printBoard() }
-                    <Blinki x={0} y={0} color={Color.GREEN} onPress={() => this.draw()} />
+                    { board }
+                    <Blinki><functionX x={0} color={Color.GREEN} onPress={() => this.enterDrawMode()} /></Blinki>
                 </launchpad>
             );
         }
     }
 }
 
-
-
-//     for (let x = 0; x < MAX_COLS; x++) {
-//         pad.setFunctionX(x, Color.BLACK);
-//         pad.setFunctionY(x, Color.BLACK);
-//         for (let y = 0; y < MAX_ROWS; y++) {
-//             pad.setSquare(x, y, Color.BLACK);
-//         }
-//     }
-//     console.log('Launchpad cleared and ready to go.');
-
-//     enableDrawInput();
-// }
-
-// const manualToggleDraw = (x, y) => {
-//     let newColor = Color.RED;
-//     board[x][y] = true;
-//     if (pad.getSquare(x, y).getCode() === newColor.getCode()) {
-//         newColor = Color.BLACK;
-//         board[x][y] = false;
-//     }
-//     pad.setSquare(x, y, newColor);
-// };
-
-// const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
-
-// const startGame = async () => {
-//     pad.removeListener('input', manualToggleDraw);
-//     pad.removeListener('functionY', startGame);
-
-//     let paused = false;
-
-//     console.log('Press [A-H] again to pause/unpause.');
-//     pad.on('functionY', () => { paused = !paused; });
-
-//     let cycle = 1;
-
-//     while (true) {
-//         await sleep(STEP_DELAY_MS);
-//         if (paused) { 
-//             continue;
-//         }
-//         cycle++;
-
-//         drawBoard(board);
-
-//         board = calculateNewBoard(board, cycle);
-//     }
-// }
-
-// function drawBoard(board) {
-//     for (let x = 0; x < MAX_COLS; x++) {
-//         for (let y = 0; y < MAX_ROWS; y++) {
-//             const generation = board[x][y];
-//             let color = COLORS[generation % COLORS.length]
-//             if (generation === 0) {
-//                 color = Color.BLACK
-//             }
-            
-//             pad.setSquare(x, y, color);
-//         }
-//     }
-// }
-
-function calculateNewBoard(board, cycle = true) {
+function calculateNewBoard(board, cycle = 1) {
     const newBoard = [];
 
     for (let x = 0; x < board.length; x++) {

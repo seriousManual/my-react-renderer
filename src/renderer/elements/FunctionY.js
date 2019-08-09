@@ -3,19 +3,20 @@ import { Color } from 'lunchpad'
 export default class FunctionY {
     constructor({y, color, onPress}) {
         this._y = y;
-        this._color = color;
+        this._color = color || Color.BLACK;
         this._onPress = onPress || undefined;
         this._onPressWrapped = undefined;
     }
 
     setLaunchpad(launchpad) {
         this._launchpad = launchpad;
+
         this.render();
+        this._registerEventHandler();
     }
 
     render() {
         this._launchpad.setFunctionY(this._y, this._color);
-        this._registerEventHandler();
     }
 
     prepareUpdate({y, onPress}) {
@@ -29,13 +30,17 @@ export default class FunctionY {
     }
 
     update({y, color, onPress}) {
-        if (this._y === y && this._color.getCode() === color.getCode() && this._onPress === onPress) {
+        if (this._onPress !== onPress) {
+            this._onPress = onPress;
+            this._registerEventHandler();
+        }
+
+        if (this._y === y && this._color.getCode() === color.getCode()) {
             return;
         }
 
         this._y = y;
         this._color = color;
-        this._onPress = onPress;
 
         return this.render();
     }
