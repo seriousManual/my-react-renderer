@@ -54,7 +54,7 @@ export default class GameOfLife extends React.Component {
 
     enterExecuteMode() {
         this.setState({mode: MODE_EXEC})
-console.log('d');
+
         let cycle = 1;
         this._interval = setInterval(() => {
             const newBoard = calculateNewBoard(this.state.board, cycle++)
@@ -85,7 +85,7 @@ console.log('d');
             return (
                 <launchpad launchpad={this.props.launchpad}>
                     { board }
-                    <Blinki><functionX x={0} color={Color.GREEN} onPress={() => this.enterDrawMode()} /></Blinki>
+                    <Blinki x={0} y={8} color={Color.GREEN} onPress={() => this.enterDrawMode()} />
                 </launchpad>
             );
         }

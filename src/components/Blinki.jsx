@@ -20,11 +20,10 @@ class Blinki extends Component {
     }
    
     render() {
-      if (!this.state.active) {
-        return null;
-      }
+      const { color, altColor = Color.BLACK, ...restProps } = this.props;
+      const myColor = this.state.active ? color : altColor;
 
-      return this.props.children;
+      return <button color={myColor} {...restProps} />
     }
 }
 
