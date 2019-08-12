@@ -10,6 +10,18 @@ import LaunchpadElement from './elements/Launchpad';
 
 const reconcilerDebug = debug('react-lp:reconciler');
 
+const BUTTON = 'button';
+const FUNCTION_X = 'functionX';
+const FUNCTION_Y = 'functionY';
+const LAUNCHPAD = 'launchpad'
+
+const map = {
+  [BUTTON]: ButtonElement,
+  [FUNCTION_X]: FunctionXElement,
+  [FUNCTION_Y]: FunctionYElement,
+  [LAUNCHPAD]: LaunchpadElement,
+};
+
 const hostConfig = {
   getRootHostContext(rootContainerInstance) {
     return {}
@@ -34,19 +46,11 @@ const hostConfig = {
   createInstance(type, props, rootContainerInstance, hostContext, internalInstanceHandle) {
     reconcilerDebug('createInstance', type, props, rootContainerInstance, hostContext);
     
-    switch (type) {
-      case 'button':
-          return new ButtonElement(props);
-      case 'launchpad':
-        return new LaunchpadElement(props);
-      case 'functionX':
-        return new FunctionXElement(props);
-      case 'functionY':
-        return new FunctionYElement(props);
-      default:
-        return null;
+    if (map[type]) {
+      return new map[type](props);
     }
-    
+
+    return null;    
   },
 
   appendInitialChild(parentInstance, child) {
@@ -61,7 +65,7 @@ const hostConfig = {
   prepareUpdate(lpElement, type, oldProps, newProps, rootContainerInstance, hostContext) {
     reconcilerDebug('prepareUpdate', lpElement, type, oldProps, newProps);
 
-    if (type === 'button'  || type === 'functionX' || type === 'functionY') {
+    if (lpElement.prepareUpdate) {
       lpElement.prepareUpdate(newProps);
     }
 
@@ -102,11 +106,10 @@ const hostConfig = {
 
   commitUpdate(lpElement, updatePayload, type, oldProps, newProps, internalInstanceHandle) {
     reconcilerDebug('commitUpdate', {lpElement, updatePayload, type, oldProps, newProps, internalInstanceHandle})
-    
-    if (type === 'button'  || type === 'functionX' || type === 'functionY' || type === 'launchpad') {
+
+    if (lpElement.update) {
       lpElement.update(newProps);
     }
-    
   },
 
   resetTextContent(domElement) {

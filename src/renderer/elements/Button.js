@@ -37,7 +37,7 @@ export default class Button {
     }
 
     update({x = 8, y = 8, color = Color.BLACK, onPress}) {
-        if (this._onPress !== onPress) {
+        if (onPress && this._onPress !== onPress) {
             this._onPress = onPress;
             this._registerEventHandler();
         }
