@@ -4,8 +4,8 @@ import React from 'react'
 import Blinki from '../../components/Blinki';
 import BigPad from '../../renderer/components/BigPad';
 
-const MAX_COLS = 8;
-const MAX_ROWS = 8;
+const MAX_COLS = 9;
+const MAX_ROWS = 9;
 const STEP_DELAY_MS = 200;
 const COLORS = [Color.RED, Color.GREEN, Color.AMBER];
 const MODE_DRAW = 'mode_draw';
@@ -54,7 +54,7 @@ export default class GameOfLife extends React.Component {
 
     enterExecuteMode() {
         this.setState({mode: MODE_EXEC})
-
+console.log('d');
         let cycle = 1;
         this._interval = setInterval(() => {
             const newBoard = calculateNewBoard(this.state.board, cycle++)

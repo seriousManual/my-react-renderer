@@ -17,10 +17,16 @@ export default class Button {
     }
 
     render() {
-        this._launchpad.setSquare(this._x, this._y, this._color);
+        if (this._x === 8) {
+            this._launchpad.setFunctionY(this._y, this._color);
+        } else if (this._y === 8) {
+            this._launchpad.setFunctionX(this._x, this._color);
+        } else {
+            this._launchpad.setSquare(this._x, this._y, this._color);
+        }
     }
 
-    prepareUpdate({x, y, onPress}) {
+    prepareUpdate({x = 8, y = 8, onPress}) {
         if (this._x !== x || this._y !== y) {
             this.destroy();
         }
@@ -30,7 +36,7 @@ export default class Button {
         }
     }
 
-    update({x, y, color = Color.BLACK, onPress}) {
+    update({x = 8, y = 8, color = Color.BLACK, onPress}) {
         if (this._onPress !== onPress) {
             this._onPress = onPress;
             this._registerEventHandler();
@@ -57,7 +63,7 @@ export default class Button {
             return;
         }
 
-        this._onPressWrapped = (x, y) => {
+        this._onPressWrapped = (x = 8, y = 8) => {
             if (x !== this._x || y !== this._y) {
                 return;
             }
@@ -65,7 +71,13 @@ export default class Button {
             this._onPress();
         };
 
-        this._launchpad.on('input', this._onPressWrapped);
+        if (this._x === 8) {
+            this._launchpad.on('functionY', this._onPressWrapped);
+        } else if (this._y === 8) {
+            this._launchpad.on('functionX', this._onPressWrapped);
+        } else {
+            this._launchpad.on('input', this._onPressWrapped);
+        }
     }
 
     _removeEventListener() {
@@ -73,7 +85,14 @@ export default class Button {
             return;
         }
 
-        this._launchpad.removeListener('input', this._onPressWrapped);
+        if (this._x === 8) {
+            this._launchpad.removeListener('functionY', this._onPressWrapped);
+        } else if (this._y === 8) {
+            this._launchpad.removeListener('functionX', this._onPressWrapped);
+        } else {
+            this._launchpad.removeListener('input', this._onPressWrapped);
+        }
+
         this._onPressWrapped = null;
     }
 }

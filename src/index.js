@@ -10,19 +10,16 @@ import Wild from './examples/Wild'
 import Test from './examples/Test'
 import GoL from './examples/gol/Gol'
 
-// const mockLP = getMockLP();
+// initialize().then(launchpad => {
+//   LaunchpadRenderer.render(<GoL launchpad={launchpad} />);
+// });
 
-// mockLP.on('rerender', renderMock);
+const mockLP = getMockLP();
+mockLP.on('rerender', renderMock);
 
-initialize().then(launchpad => {
-  LaunchpadRenderer.render(<GoL launchpad={launchpad} />);
-});
+function renderMock() {
+   ReactDOM.render(<Shim launchpad={mockLP} />, document.getElementById('root'));
+}
 
-// function renderMock() {
-//    ReactDOM.render(<Shim launchpad={mockLP} />, document.getElementById('root'));
-// }
-
-
-// LaunchpadRenderer.render(<GoL launchpad={mockLP} />);
-
-// renderMock();
+LaunchpadRenderer.render(<GoL launchpad={mockLP} />);
+renderMock();
