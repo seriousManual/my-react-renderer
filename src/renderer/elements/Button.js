@@ -1,4 +1,5 @@
 import { Color } from 'lunchpad'
+import * as debug from 'debug';
 
 export default class Button {
     constructor({x, y, color, onPress}) {
@@ -7,6 +8,15 @@ export default class Button {
         this._color = color || Color.BLACK;
         this._onPress = onPress || undefined;
         this._onPressWrapped = undefined;
+
+        let debugName = `button:${this._x}_${this._y}`;
+        if (this._isFunctionX()) {
+            debugName = `functionX:${this._x}`;
+        } else if (this._isFunctionY()) {
+            debugName = `functionY:${this._y}`;
+        }
+
+        this._debug = debug(`react-lp:reconciler:${debugName}`);
     }
 
     setLaunchpad(launchpad) {
@@ -17,9 +27,15 @@ export default class Button {
     }
 
     render() {
-        if (this._x === 8) {
+        if (this._color.getCode() === 0) {
+            this._debug('unset');
+        } else {
+            this._debug('set', this._color.getCode());
+        }        
+
+        if (this._isFunctionY()) {
             this._launchpad.setFunctionY(this._y, this._color);
-        } else if (this._y === 8) {
+        } else if (this._isFunctionX()) {
             this._launchpad.setFunctionX(this._x, this._color);
         } else {
             this._launchpad.setSquare(this._x, this._y, this._color);
@@ -68,12 +84,16 @@ export default class Button {
                 return;
             }
 
+            this._debug('press');
+
             this._onPress();
         };
 
-        if (this._x === 8) {
+        this._debug('registerListener');
+
+        if (this._isFunctionY()) {
             this._launchpad.on('functionY', this._onPressWrapped);
-        } else if (this._y === 8) {
+        } else if (this._isFunctionX()) {
             this._launchpad.on('functionX', this._onPressWrapped);
         } else {
             this._launchpad.on('input', this._onPressWrapped);
@@ -85,14 +105,24 @@ export default class Button {
             return;
         }
 
-        if (this._x === 8) {
+        this._debug('removeListener');
+
+        if (this._isFunctionY()) {
             this._launchpad.removeListener('functionY', this._onPressWrapped);
-        } else if (this._y === 8) {
+        } else if (this._isFunctionX()) {
             this._launchpad.removeListener('functionX', this._onPressWrapped);
         } else {
             this._launchpad.removeListener('input', this._onPressWrapped);
         }
 
         this._onPressWrapped = null;
+    }
+
+    _isFunctionX() {
+        return this._y === 8;
+    }
+
+    _isFunctionY() {
+        return this._x === 8;
     }
 }

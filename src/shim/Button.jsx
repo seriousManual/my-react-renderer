@@ -5,7 +5,7 @@ export default class Square extends React.Component {
         let {color, onSelect, round} = this.props
 
         if (!onSelect) {
-            onSelect = () => console.log('bier');
+            onSelect = () => true;
         }
 
         let size = 60
@@ -24,7 +24,7 @@ export default class Square extends React.Component {
             style.borderRadius = (size / 2) + 'px'
         }
 
-        return <div style={style} onClick={() => onSelect(this.props.x, this.props.y)}></div>;
+        return <div style={style} onMouseDown={() => onSelect(this.props.x, this.props.y)}></div>;
     }
 
     _getColor(color) {

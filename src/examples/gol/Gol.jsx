@@ -24,6 +24,8 @@ export default class GameOfLife extends React.Component {
         }
 
         this._interval = null;
+        this.enterExecuteMode = this.enterExecuteMode.bind(this);
+        this.enterDrawMode = this.enterDrawMode.bind(this);
     }
 
     setButton(x, y) {
@@ -78,14 +80,14 @@ export default class GameOfLife extends React.Component {
             return (
                 <launchpad launchpad={this.props.launchpad} onButtonPress={(x, y) => this.setButton(x, y)}>
                     { board }
-                    <functionX x={0} color={Color.RED} onPress={() => this.enterExecuteMode()} />
+                    <functionX x={0} color={Color.RED} onPress={this.enterExecuteMode} />
                 </launchpad>
             );
         } else if (this.state.mode === MODE_EXEC) {
             return (
                 <launchpad launchpad={this.props.launchpad}>
                     { board }
-                    <Blinki x={0} y={8} color={Color.GREEN} onPress={() => this.enterDrawMode()} />
+                    <Blinki x={0} y={8} color={Color.GREEN} onPress={this.enterDrawMode} />
                 </launchpad>
             );
         }

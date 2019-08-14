@@ -1,3 +1,6 @@
 * anonymous event handlers do cause a rebind on every rerender
 * without key: updates element, with key: removes and creates element
 * useEffect needs dedicated implementation
+
+* the tree of elements represents the "virtual dom"
+  ** can be used to demonstrate the "virtual dom" 
