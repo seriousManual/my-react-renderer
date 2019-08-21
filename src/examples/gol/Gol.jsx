@@ -2,7 +2,6 @@ import { Color } from 'lunchpad';
 import React from 'react'
 
 import Blinki from '../../components/Blinki';
-import BigPad from '../../renderer/components/BigPad';
 
 const MAX_COLS = 9;
 const MAX_ROWS = 9;

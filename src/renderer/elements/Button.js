@@ -27,6 +27,10 @@ export default class Button {
     }
 
     render() {
+        if (this._x < 0 || this._x > 8 || this._y < 0 || this._y > 8) {
+            return;
+        }
+
         if (this._color.getCode() === 0) {
             this._debug('unset');
         } else {
@@ -70,6 +74,8 @@ export default class Button {
     }
 
     destroy() {
+        this._debug('destroy');
+
         this.update({x: this._x, y: this._y, color: Color.BLACK});
         this._removeEventListener();
     }
@@ -79,23 +85,34 @@ export default class Button {
             return;
         }
 
-        this._onPressWrapped = (x = 8, y = 8) => {
-            if (x !== this._x || y !== this._y) {
-                return;
-            }
-
-            this._debug('press');
-
-            this._onPress();
-        };
-
         this._debug('registerListener');
 
         if (this._isFunctionY()) {
+            this._onPressWrapped = y => {
+                if (y !== this._y) return;
+
+                this._debug('press');
+                this._onPress();
+            }
+
             this._launchpad.on('functionY', this._onPressWrapped);
         } else if (this._isFunctionX()) {
+            this._onPressWrapped = x => {
+                if (x !== this._x) return;
+
+                this._debug('press');
+                this._onPress();
+            }
+
             this._launchpad.on('functionX', this._onPressWrapped);
         } else {
+            this._onPressWrapped = (x = 8, y = 8) => {
+                if (x !== this._x || y !== this._y) return;
+    
+                this._debug('press');
+                this._onPress();
+            };
+
             this._launchpad.on('input', this._onPressWrapped);
         }
     }

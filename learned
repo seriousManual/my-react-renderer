@@ -2,5 +2,8 @@
 * without key: updates element, with key: removes and creates element
 * useEffect needs dedicated implementation
 
+* rendering happens from the top down (BigPad does not work because the parent still sees it as BigPad not as its individual buttons)
+
 * the tree of elements represents the "virtual dom"
   ** can be used to demonstrate the "virtual dom" 
+

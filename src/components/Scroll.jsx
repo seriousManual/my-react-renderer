@@ -1,0 +1,33 @@
+import React, { Children } from 'react';
+
+export default class Scroll extends React.Component {
+    constructor() {
+        super(); 
+
+        this.state = {
+            x: 0
+        };
+
+        this.handle = null;
+    }
+
+    componentDidMount() {
+        this.handle = setInterval(() => {
+            console.log('croll');
+            this.setState({x: this.state.x + 1});
+        }, 400);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.handle);
+    }
+    
+    render() {
+        console.log('fart');
+        return Children.map(this.props.children, child => {
+            console.log(child);
+            console.log(child.props);
+            return React.cloneElement(child, {x: child.props.x - this.state.x});
+        })
+    }
+}
