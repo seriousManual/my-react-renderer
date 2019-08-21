@@ -13,7 +13,6 @@ export default class Scroll extends React.Component {
 
     componentDidMount() {
         this.handle = setInterval(() => {
-            console.log('croll');
             this.setState({x: this.state.x + 1});
         }, 400);
     }
@@ -23,11 +22,10 @@ export default class Scroll extends React.Component {
     }
     
     render() {
-        console.log('fart');
         return Children.map(this.props.children, child => {
-            console.log(child);
-            console.log(child.props);
-            return React.cloneElement(child, {x: child.props.x - this.state.x});
+            const newX = child.props.x - this.state.x;
+
+            return React.cloneElement(child, {x: newX});
         })
     }
 }

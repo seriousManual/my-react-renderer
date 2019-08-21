@@ -1,4 +1,3 @@
-import { Color } from 'lunchpad'
 import Button from './Button';
 
 export default class FunctionY extends Button {

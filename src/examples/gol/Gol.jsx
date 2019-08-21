@@ -120,10 +120,10 @@ function countNeighbours(matrix, x, y) {
     let count = 0;
     let size = matrix.length;
 
-    let left = (x == 0) ? size - 1 : x - 1;
-    let right = (x == size - 1) ? 0 : x + 1;
-    let top = (y == size - 1) ? 0 : y + 1;
-    let bottom = (y == 0) ? size - 1 : y - 1;
+    let left = (x === 0) ? size - 1 : x - 1;
+    let right = (x === size - 1) ? 0 : x + 1;
+    let top = (y === size - 1) ? 0 : y + 1;
+    let bottom = (y === 0) ? size - 1 : y - 1;
 
     if (matrix[left][y]) count++;
     if (matrix[left][top]) count++;

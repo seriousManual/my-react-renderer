@@ -8,11 +8,14 @@ export default function Text(props) {
     const y = props.y || 0;
     const color = props.color || Color.AMBER;
 
-    const [firstLetter, ...rest] = props.text.split('');
+    const letters = props.text
+        .split('')
+        .filter(Boolean)
+        .map(letter => letter.toUpperCase());
 
     return (
-        <Letter letter={firstLetter} color={color} x={x} y={y}>
-            {rest.join('')}
-        </Letter>
+        <>
+            {letters.map((letter, index) => <Letter key={index} letter={letter} x={x + index * 5} y={y} />)}
+        </>
     )
 }

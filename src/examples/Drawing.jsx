@@ -1,6 +1,7 @@
 import { Color } from 'lunchpad';
 import React from 'react'
 
+import Letter from '../components/text/Letter';
 import Text from '../components/text/Text';
 import Scroll from '../components/Scroll'
 
@@ -11,7 +12,6 @@ export default class Drawing extends React.Component {
         this.state = {
             board: {},
             currentColor: Color.RED,
-            number: 0,
         }
 
         this.clear = this.clear.bind(this);
@@ -33,10 +33,7 @@ export default class Drawing extends React.Component {
             board[key] = this.state.currentColor;
         }
         
-        this.setState({ 
-            board,
-            number: (this.state.number + 1) % 10
-        });
+        this.setState({ board });
     }
 
     chooseColor(color) {
@@ -55,7 +52,10 @@ export default class Drawing extends React.Component {
             const color = this.state.board[key];
             const [x, y] = key.split('_');
             buttons.push(<button x={x} y={y} key={key} color={color} />);
-            serialized.push({x, y})
+            
+            if (color === Color.RED) {
+                serialized.push({x, y})
+            }
         })
 
         console.log(JSON.stringify(serialized));
@@ -73,9 +73,9 @@ export default class Drawing extends React.Component {
                 <functionX x={7} color={this.state.currentColor} />
                 <functionY y={0} color={Color.RED} onPress={() => this.clear() } />
 
-                <Scroll>
-                    <Text text="Hello everybody!" y={1} x={0} />
-                </Scroll>
+                {/* <Scroll>
+                    <Text text="Hello what up?" y={1} x={10} />
+                </Scroll> */}
 
                 {this.printBoard()}
             </launchpad>

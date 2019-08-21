@@ -85,7 +85,7 @@ export default class Button {
             return;
         }
 
-        this._debug('registerListener');
+        this._debug('addListener');
 
         if (this._isFunctionY()) {
             this._onPressWrapped = y => {
