@@ -2,25 +2,10 @@ import debug from 'debug';
 import ReactReconciler from 'react-reconciler';
 import * as scheduler from 'scheduler';
 
-import ButtonElement from './elements/Button';
-import FunctionXElement from './elements/FunctionX';
-import FunctionYElement from './elements/FunctionY';
 import RootElement from './elements/Root';
-import LaunchpadElement from './elements/Launchpad';
+import createElement from './elements/createElement'
 
 const reconcilerDebug = debug('react-lp:reconciler');
-
-const BUTTON = 'button';
-const FUNCTION_X = 'functionX';
-const FUNCTION_Y = 'functionY';
-const LAUNCHPAD = 'launchpad'
-
-const map = {
-  [BUTTON]: ButtonElement,
-  [FUNCTION_X]: FunctionXElement,
-  [FUNCTION_Y]: FunctionYElement,
-  [LAUNCHPAD]: LaunchpadElement,
-};
 
 const hostConfig = {
   getRootHostContext(rootContainerInstance) {
@@ -45,12 +30,8 @@ const hostConfig = {
 
   createInstance(type, props, rootContainerInstance, hostContext, internalInstanceHandle) {
     reconcilerDebug('createInstance', type, props, rootContainerInstance, hostContext);
-    
-    if (map[type]) {
-      return new map[type](props);
-    }
 
-    return null;    
+    return createElement(type, props);
   },
 
   appendInitialChild(parentInstance, child) {
