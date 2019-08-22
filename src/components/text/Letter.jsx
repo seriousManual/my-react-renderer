@@ -59,8 +59,8 @@ export default function Letter(props) {
     }
 
     return stencil.map(({x, y}, index) => {
-        // console.log(`${letter}_${index}`);
-
-        return <button color={color} x={baseX + x} y={baseY + y} key={`${letter}_${index}`} />;
+        const myX = baseX + x;
+        const myY = baseY + y;
+        return <button color={color} x={myX} y={myY} key={`${myX}_${myY}`} />;
     });
 }

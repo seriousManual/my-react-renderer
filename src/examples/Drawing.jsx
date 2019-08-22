@@ -12,6 +12,7 @@ export default class Drawing extends React.Component {
         this.state = {
             board: {},
             currentColor: Color.RED,
+            text: '2'
         }
 
         this.clear = this.clear.bind(this);
@@ -41,7 +42,10 @@ export default class Drawing extends React.Component {
     }
 
     clear() {
-        this.setState({board: {}});
+        this.setState({
+            board: {},
+            text: this.state.text === 2 ? 3 : 2
+        });
     }
 
     printBoard() {
@@ -73,9 +77,8 @@ export default class Drawing extends React.Component {
                 <functionX x={7} color={this.state.currentColor} />
                 <functionY y={0} color={Color.RED} onPress={() => this.clear() } />
 
-                {/* <Scroll>
-                    <Text text="Hello what up?" y={1} x={10} />
-                </Scroll> */}
+                
+                <Letter letter={this.state.text} y={1} x={0} />
 
                 {this.printBoard()}
             </launchpad>
