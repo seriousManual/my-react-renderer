@@ -1,8 +1,8 @@
 import Button from './Button';
 
 export default class FunctionY extends Button {
-    constructor({y, color, onPress}) {
-        super({y, color, onPress, x: 8});
+    constructor(props) {
+        super({...props, x: 8})
     }
 
     _getDebugName() {

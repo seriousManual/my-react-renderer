@@ -11,7 +11,6 @@ export default class Launchpad {
     }
   
     appendChild(child) {
-      child.setLaunchpad(this._lp);
       this.children.push(child);
     }
   

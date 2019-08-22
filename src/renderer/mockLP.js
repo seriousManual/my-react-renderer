@@ -20,7 +20,6 @@ class Mock extends EventEmitter {
     setSquare(x, y, color) {
         mockDebug('setSquare', x, y, color);
         this.pad[-1 * y + 8][x] = color;
-        this.draw();
 
         return this;
     }
@@ -28,7 +27,6 @@ class Mock extends EventEmitter {
     setFunctionX(x, color) {
         mockDebug('setFunctionX', x, color);
         this.pad[0][x] = color;
-        this.draw();
 
         return this;
     }
@@ -36,7 +34,6 @@ class Mock extends EventEmitter {
     setFunctionY(y, color) {
         mockDebug('setFunctionY', y, color);
         this.pad[-1 * y + 8][8] = color;
-        this.draw();
 
         return this;
     }
@@ -45,35 +42,13 @@ class Mock extends EventEmitter {
         return this;
     }
 
-    draw() {
-        // console.log(this.pad);
-        // let row = 1;
-        // for (const xRow of this.pad) {
-        //     const xRowString = xRow.map(color => this.mapColor(color)).join(' ');
-        //     console.log(`${row * -1 + 9}  |  ${xRowString}`);
-        //     row++;
-        // }
-        // console.log('--------------------------------')
-        this.emit('rerender');
+    flush() {
+        this._draw();
+        return this;
     }
 
-    mapColor(color) {
-        const r = color.getRed();
-        const g = color.getGreen();
-
-        if (r > 0 && g > 0) {
-            return 'A';
-        }
-
-        if (r > 0) {
-            return 'R';
-        }
-
-        if (g > 0) {
-            return 'G';
-        }
-
-        return ' ';
+    _draw() {
+        this.emit('rerender');
     }
 }
 

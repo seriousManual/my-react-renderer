@@ -5,7 +5,7 @@ import Blinki from '../../components/Blinki';
 
 const MAX_COLS = 9;
 const MAX_ROWS = 9;
-const STEP_DELAY_MS = 200;
+const STEP_DELAY_MS = 300;
 const COLORS = [Color.RED, Color.GREEN, Color.AMBER];
 const MODE_DRAW = 'mode_draw';
 const MODE_EXEC = 'mode_exec';
@@ -77,14 +77,14 @@ export default class GameOfLife extends React.Component {
 
         if (this.state.mode === MODE_DRAW) {
             return (
-                <launchpad launchpad={this.props.launchpad} onButtonPress={(x, y) => this.setButton(x, y)}>
+                <launchpad onButtonPress={(x, y) => this.setButton(x, y)}>
                     { board }
                     <functionX x={0} color={Color.RED} onPress={this.enterExecuteMode} />
                 </launchpad>
             );
         } else if (this.state.mode === MODE_EXEC) {
             return (
-                <launchpad launchpad={this.props.launchpad}>
+                <launchpad>
                     { board }
                     <Blinki x={0} y={8} color={Color.GREEN} onPress={this.enterDrawMode} />
                 </launchpad>

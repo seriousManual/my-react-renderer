@@ -19,6 +19,7 @@ export default class App extends React.Component {
     }
 
     render() {
+        console.log('rerender');
         const launchpad = this.props.launchpad;
         const pad = launchpad.pad;
 

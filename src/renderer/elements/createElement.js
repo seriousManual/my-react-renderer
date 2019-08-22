@@ -15,13 +15,15 @@ const map = {
   [LAUNCHPAD]: LaunchpadElement,
 };
 
-export default function createElement(type, props) {
+export default function createElement(type, props, launchpad) {
+    const newProps = {...props, launchpad};
+console.log({newProps});
     if (type === BUTTON) {
-        return createButton(props);
+        return createButton(newProps);
     }
 
     if (map[type]) {
-        return new map[type](props);
+        return new map[type](newProps);
     }
 
     return null;

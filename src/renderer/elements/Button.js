@@ -2,7 +2,8 @@ import { Color } from 'lunchpad'
 import * as debug from 'debug';
 
 export default class Button {
-    constructor({x, y, color, onPress}) {
+    constructor({x, y, color, onPress, launchpad}) {
+        this._launchpad = launchpad;
         this._x = x;
         this._y = y;
         this._color = color || Color.BLACK;
@@ -10,17 +11,13 @@ export default class Button {
         this._onPressWrapped = undefined;
 
         this._debug = debug(`react-lp:reconciler:${this._getDebugName()}`);
+
+        this.render();
+        this._registerEventHandler();
     }
 
     _getDebugName() {
         return `button:${this._x}_${this._y}`
-    }
-
-    setLaunchpad(launchpad) {
-        this._launchpad = launchpad;
-
-        this.render();
-        this._registerEventHandler();
     }
 
     render() {

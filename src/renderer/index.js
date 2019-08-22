@@ -26,12 +26,14 @@ const hostConfig = {
 
   resetAfterCommit(containerInfo) {
     reconcilerDebug('resetAfterCommit', containerInfo);
+
+    containerInfo.getLaunchpad().flush();
   },
 
   createInstance(type, props, rootContainerInstance, hostContext, internalInstanceHandle) {
-    reconcilerDebug('createInstance', type, props, rootContainerInstance, hostContext);
+    reconcilerDebug('createInstance', {type, props, rootContainerInstance, hostContext, internalInstanceHandle});
 
-    return createElement(type, props);
+    return createElement(type, props, rootContainerInstance.getLaunchpad());
   },
 
   appendInitialChild(parentInstance, child) {
@@ -136,8 +138,8 @@ const LPRenderer = ReactReconciler(hostConfig);
 
 let internalContainerStructure;
 export default {
-  render(elements, callback) {
-    const root = new RootElement();
+  render(elements, launchpad, callback) {
+    const root = new RootElement(launchpad);
 
     if (!internalContainerStructure) {
       internalContainerStructure = LPRenderer.createContainer(root, false, false);

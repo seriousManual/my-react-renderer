@@ -1,5 +1,13 @@
 export default class Root {
     children = [];
+
+    constructor(launchpad) {
+      this._launchpad = launchpad;
+    }
+
+    getLaunchpad() {
+      return this._launchpad;
+    }
   
     appendChild(child) {
       this.children.push(child);

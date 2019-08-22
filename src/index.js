@@ -10,6 +10,7 @@ import Wild from './examples/Wild'
 import Test from './examples/Test'
 import GoL from './examples/gol/Gol'
 import Drawing from './examples/Drawing'
+import MutTest from './examples/MutTest'
 
 // initialize().then(launchpad => {
 //   LaunchpadRenderer.render(<GoL launchpad={launchpad} />);
@@ -22,5 +23,5 @@ function renderMock() {
    ReactDOM.render(<Shim launchpad={mockLP} />, document.getElementById('root'));
 }
 
-LaunchpadRenderer.render(<Drawing launchpad={mockLP} />);
+LaunchpadRenderer.render(<GoL />, mockLP);
 renderMock();
