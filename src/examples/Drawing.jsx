@@ -21,6 +21,7 @@ export default class Drawing extends React.Component {
     }
 
     setButton(x, y) {
+        console.log(x, y);
         if (this.state.currentColor === Color.BLACK) {
             return;
         }
@@ -42,10 +43,7 @@ export default class Drawing extends React.Component {
     }
 
     clear() {
-        this.setState({
-            // board: {},
-            text: !this.state.text
-        });
+        this.setState({ board: {} });
     }
 
     printBoard() {
@@ -69,19 +67,14 @@ export default class Drawing extends React.Component {
 
     render() {
         return (
-            <launchpad launchpad={this.props.launchpad} >
-                {/* <functionX x={0} color={Color.RED} onPress={() => this.chooseColor(Color.RED)} />
+            <launchpad launchpad={this.props.launchpad} onButtonPress={this.setButton} >
+                <functionX x={0} color={Color.RED} onPress={() => this.chooseColor(Color.RED)} />
                 <functionX x={1} color={Color.AMBER} onPress={() => this.chooseColor(Color.AMBER)} />
                 <functionX x={2} color={Color.GREEN} onPress={() => this.chooseColor(Color.GREEN)} />
 
                 <functionX x={7} color={this.state.currentColor} />
+
                 <functionY y={0} color={Color.RED} onPress={() => this.clear() } />
-
-                
-                <Letter letter={this.state.text} y={1} x={0} /> */}
-
-                <functionY y={0} color={this.state.text ? Color.RED : Color.GREEN} onPress={() => this.clear() } />
-                <functionY y={1} color={this.state.text ? Color.RED : Color.GREEN} onPress={() => this.clear() } />
 
                 {this.printBoard()}
             </launchpad>

@@ -11,6 +11,7 @@ import Test from './examples/Test'
 import GoL from './examples/gol/Gol'
 import Drawing from './examples/Drawing'
 import MutTest from './examples/MutTest'
+import Text from './examples/Text'
 
 // initialize().then(launchpad => {
 //   LaunchpadRenderer.render(<GoL launchpad={launchpad} />);
@@ -23,5 +24,5 @@ function renderMock() {
    ReactDOM.render(<Shim launchpad={mockLP} />, document.getElementById('root'));
 }
 
-LaunchpadRenderer.render(<GoL />, mockLP);
+LaunchpadRenderer.render(<Text />, mockLP);
 renderMock();

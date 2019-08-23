@@ -15,7 +15,11 @@ export default function Text(props) {
 
     return (
         <>
-            {letters.map((letter, index) => <Letter key={index} letter={letter} x={x + index * 5} y={y} />)}
+            {letters.map((letter, index) => {
+                console.log(x + index * 3 + 1);
+
+                return <Letter key={index} letter={letter} x={x + index * 4} y={y} color={color} />
+            })}   
         </>
     )
 }

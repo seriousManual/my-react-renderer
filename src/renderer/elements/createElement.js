@@ -17,7 +17,7 @@ const map = {
 
 export default function createElement(type, props, launchpad) {
     const newProps = {...props, launchpad};
-console.log({newProps});
+
     if (type === BUTTON) {
         return createButton(newProps);
     }
