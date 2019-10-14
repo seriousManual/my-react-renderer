@@ -4,8 +4,8 @@ import * as debug from 'debug';
 export default class Button {
     constructor({x, y, color, onPress, launchpad}) {
         this._launchpad = launchpad;
-        this._x = x;
-        this._y = y;
+        this._x = parseInt(x, 10);
+        this._y = parseInt(y, 10);
         this._color = color || Color.BLACK;
         this._onPress = onPress || undefined;
         this._onPressWrapped = undefined;
@@ -35,6 +35,8 @@ export default class Button {
     }
 
     _setColor() {
+        console.log(typeof this._x, typeof this._y);
+        console.log('from button', this._x, this._y, this._color, this._launchpad);
         this._launchpad.setSquare(this._x, this._y, this._color);
     }
 
@@ -58,8 +60,8 @@ export default class Button {
             return;
         }
 
-        this._x = x;
-        this._y = y;
+        this._x = parseInt(x, 10);
+        this._y = parseInt(y, 10);
         this._color = color;
 
         this.render();

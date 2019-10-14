@@ -1,10 +1,10 @@
 {
-  "name": "reconciler",
+  "name": "react-launchpad",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "fbjs": "^1.0.0",
-    "lunchpad": "^2.1.1",
+    "lunchpad": "^2.4.0",
     "midi": "^0.9.5",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",

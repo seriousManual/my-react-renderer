@@ -2,8 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom';
 import LaunchpadRenderer from './renderer'
 
-import { initialize } from 'lunchpad'
-import getMockLP from './renderer/mockLP';
+import { initialize, Mock, Bridge } from 'lunchpad'
 import Shim from './shim/App';
 
 import Wild from './examples/Wild'
@@ -13,16 +12,26 @@ import Drawing from './examples/Drawing'
 import MutTest from './examples/MutTest'
 import Text from './examples/Text'
 
-// initialize().then(launchpad => {
-//   LaunchpadRenderer.render(<GoL launchpad={launchpad} />);
-// });
+initialize().then(launchpad => {
+   const mock0 = new Mock()
+   mock0.on('draw', () => {
+      ReactDOM.render(<Shim launchpad={mock0} />, document.getElementById('root0'))
+   })
+   mock0.emit('draw')
 
-const mockLP = getMockLP();
-mockLP.on('rerender', renderMock);
+   const mock1 = new Mock()
+   mock1.on('draw', () => {
+      ReactDOM.render(<Shim launchpad={mock1} />, document.getElementById('root1'))
+   })
+   mock1.emit('draw')
 
-function renderMock() {
-   ReactDOM.render(<Shim launchpad={mockLP} />, document.getElementById('root'));
-}
+   const mock2 = new Mock()
+   mock2.on('draw', () => {
+      ReactDOM.render(<Shim launchpad={mock2} />, document.getElementById('root2'))
+   })
+   mock2.emit('draw')
 
-LaunchpadRenderer.render(<Text />, mockLP);
-renderMock();
+   const myBridge = new Bridge([mock0, mock1, mock2, launchpad])
+   LaunchpadRenderer.render(<Drawing />, myBridge);
+});
+
