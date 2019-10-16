@@ -26,6 +26,21 @@ export default function createElement(type, props, launchpad) {
         return new map[type](newProps);
     }
 
+    // const matchLetter = type.match(/f([A-Ha-h])/);
+    // if (matchLetter) {
+    //     const numberInAlphabet = matchLetter[1].toLowerCase().charCodeAt(0) - 97;
+    //     const y = (numberInAlphabet * -1) + 7
+
+    //     return new map[FUNCTION_Y]({ ...newProps, y });
+    // }
+
+    // const matchNumber = type.match(/f([1-8])/);
+    // if (matchNumber) {
+    //     const x = matchNumber[1] - 1;
+
+    //     return new map[FUNCTION_X]({ ...newProps, x });
+    // }
+
     return null;
 }
 

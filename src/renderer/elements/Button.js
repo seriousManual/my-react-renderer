@@ -35,8 +35,6 @@ export default class Button {
     }
 
     _setColor() {
-        console.log(typeof this._x, typeof this._y);
-        console.log('from button', this._x, this._y, this._color, this._launchpad);
         this._launchpad.setSquare(this._x, this._y, this._color);
     }
 
